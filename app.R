@@ -8,7 +8,8 @@
    Properties <- read.csv('Potential-Properties.csv')
    TStops <- read.csv('TStops.csv')
    Schools <- read.csv('Schools.csv')
-  ## User Interface - Title, headings, and sidebar 
+  
+   ## User Interface - Title, headings, and sidebar 
    ui <- fluidPage(
      titlePanel("New American Pathways Housing Scout"), br(), h2("Selection Criteria"),
      sidebarLayout(position = "right",
