@@ -2,6 +2,8 @@ name: NAP-DSSG-Atlanta-2016
 account: nap-dssg-atlanta-2016
 server: shinyapps.io
 appId: 105576
-bundleId: 467500
+bundleId: 469789
 url: https://nap-dssg-atlanta-2016.shinyapps.io/NAP-DSSG-Atlanta-2016/
-when: 1464722157.2329
+when: 1464899199.88206
+asMultiple: FALSE
+asStatic: FALSE

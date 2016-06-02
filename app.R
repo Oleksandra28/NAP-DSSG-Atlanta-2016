@@ -5,46 +5,71 @@
 
    library(readxl) #IF NOT INSTALLED, NEED TO: install.packages("readxl")
 
-   Properties <- read.csv('./data/Potential-Properties.csv')
-   TStops <- read.csv('./data/TStops.csv')
-   Schools <- read.csv('./data/Schools.csv')
+   ###########################################################################################
+   ###------------------------------------------DATA---------------------------------------###
+   ###########################################################################################
+   data_folder <- paste(getwd(), 'data', sep='/')
+   
+   path_to_dekalb_apt_complexes <- paste(data_folder, 'results_dekalb_apt_complexes.csv', sep='/')
+   path_to_fulton_apt_complexes <- paste(data_folder, 'results_fulton_apt_complexes.csv', sep='/')
+
   
+   dekalb_apt_complexes <- read.csv(path_to_dekalb_apt_complexes)
+   fulton_apt_complexes <- read.csv(path_to_fulton_apt_complexes)
+   
+   path_to_dekalb_schools <- paste(data_folder, 'results_dekalb_schools.csv', sep='/')
+   path_to_fulton_schools <- paste(data_folder, 'results_fulton_schools.csv', sep='/')
+   
+   dekalb_schools <- read.csv(path_to_dekalb_schools)
+   fulton_schools <- read.csv(path_to_fulton_schools)
+   
+   ###########################################################################################
+   ###-------------------------------------------UI----------------------------------------###
+   ###########################################################################################
    ## User Interface - Title, headings, and sidebar 
+   
    ui <- fluidPage(
      titlePanel("New American Pathways Housing Scout"), br(), h2("Selection Criteria"),
-     sidebarLayout(position = "right",
-                   
+     sidebarLayout(
        sidebarPanel(width = 3, position = "left",
-        selectInput("n_bedrooms", "Bedrooms",
-                  choices = c("Studio", "1", "2","3","4","5")
-                   )
-     ),
-     mainPanel(
-       h5(strong("Dekalb & Fulton Counties"),
-       leafletOutput("mymap", height = "500", width = "800"))
-     )
-   )
-   )                 
-  
-   
+                    checkboxGroupInput(inputId='counties', label=h3('Counties'), 
+                                       choices=list("Dekalb" = 1, "Fulton" = 2), 
+                                       selected = list(1,2), inline = FALSE, width = NULL),
+                    
+                    checkboxInput(inputId='public_transit', label='Public Transit', value = TRUE, width = NULL),
+                    checkboxInput(inputId='schools', label='Schools', value = TRUE, width = NULL)
+                    
+       ),
+                   mainPanel(
+                     leafletOutput("main_map", height = "500", width = "800")
+                     )#mainPanel
+                   )#sidebarLayout
+     )#fluidPage
+                   
+
+   ###########################################################################################
+   ###---------------------------------------SERVER----------------------------------------###
+   ###########################################################################################
    ## Server with functionality components
    server <- function(input, output, session) {
      
-     
-     output$mymap <- renderLeaflet({
-       input$price 
+     output$main_map <- renderLeaflet({
        leaflet() %>%
-          addTiles(urlTemplate = "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png") %>%  
-          setView(-84.3959808,33.7769859, zoom = 10)%>%
-          addCircles(lat = ~latitude, lng = ~longitude, data= Properties, weight = 5, radius = 80, fillOpacity = .05, popup = Properties$Name, group = "Units")%>%
-          addCircles(lat = ~Lat, lng = ~Lon, data= TStops, color="#ffa500", weight = 1, radius = 10, fillOpacity = .03, group = "Transit")%>%
-          addCircles(lat = ~ Y, lng = ~X, data = Schools, color="#e01d5d", weight = 4, radius = 100, popup = Schools$FACNAME, group ="Schools")%>%
-          addLayersControl(overlayGroups = c("Units", "Transit", "Schools")) #%>%
-          ##addLegend(position = topleft, )
-       
-     })
+         addTiles(urlTemplate = "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png") %>%
+         setView(-84.3959808,33.7769859, zoom = 10) #%>%
+#          addCircles(data=dekalb_schools, lat = ~latitude, lng = ~longitude, 
+#                    weight = 5, radius = 80, fillOpacity = .05, popup = dekalb_schools$school_name, group='Schools'),
+#          addCircles(data=dekalb_schools, lat = ~latitude, lng = ~longitude, 
+#                   weight = 5, radius = 80, fillOpacity = .05, popup = dekalb_schools$school_name, group='Schools'),
+     })#output$main_map
+ 
      
-   }
+#      addLayersControl(
+#        overlayGroups = c('Schools'),
+#        options = layersControlOptions(collapsed = FALSE)
+#      )
+
+   }#server
    
    shinyApp(ui = ui, server = server)
    
