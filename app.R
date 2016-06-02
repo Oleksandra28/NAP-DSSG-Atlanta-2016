@@ -10,18 +10,26 @@
    ###########################################################################################
    data_folder <- paste(getwd(), 'data', sep='/')
    
+   ###-----------------------------------apt_complexes-------------------------------------###
    path_to_dekalb_apt_complexes <- paste(data_folder, 'results_dekalb_apt_complexes.csv', sep='/')
    path_to_fulton_apt_complexes <- paste(data_folder, 'results_fulton_apt_complexes.csv', sep='/')
 
-  
    dekalb_apt_complexes <- read.csv(path_to_dekalb_apt_complexes)
    fulton_apt_complexes <- read.csv(path_to_fulton_apt_complexes)
    
+   ###-----------------------------------schools-------------------------------------------###
    path_to_dekalb_schools <- paste(data_folder, 'results_dekalb_schools.csv', sep='/')
    path_to_fulton_schools <- paste(data_folder, 'results_fulton_schools.csv', sep='/')
    
    dekalb_schools <- read.csv(path_to_dekalb_schools)
    fulton_schools <- read.csv(path_to_fulton_schools)
+   
+   ###-----------------------------------supermarkets---------------------------------------###
+   path_to_dekalb_supermarkets <- paste(data_folder, 'results_dekalb_supermarkets.csv', sep='/')
+   path_to_fulton_supermarkets <- paste(data_folder, 'results_fulton_supermarkets.csv', sep='/')
+   
+   dekalb_supermarkets <- read.csv(path_to_dekalb_supermarkets)
+   fulton_supermarkets <- read.csv(path_to_fulton_supermarkets)
    
    ###########################################################################################
    ###-------------------------------------------UI----------------------------------------###
@@ -38,7 +46,6 @@
                     
                     checkboxInput(inputId='public_transit', label='Public Transit', value = TRUE, width = NULL),
                     checkboxInput(inputId='schools', label='Schools', value = TRUE, width = NULL)
-                    
        ),
                    mainPanel(
                      leafletOutput("main_map", height = "500", width = "800")
