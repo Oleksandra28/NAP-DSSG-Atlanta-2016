@@ -5,9 +5,9 @@
 
    library(readxl) #IF NOT INSTALLED, NEED TO: install.packages("readxl")
 
-   Properties <- read.csv('Potential-Properties.csv')
-   TStops <- read.csv('TStops.csv')
-   Schools <- read.csv('Schools.csv')
+   Properties <- read.csv('./data/Potential-Properties.csv')
+   TStops <- read.csv('./data/TStops.csv')
+   Schools <- read.csv('./data/Schools.csv')
   
    ## User Interface - Title, headings, and sidebar 
    ui <- fluidPage(
