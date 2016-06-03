@@ -45,10 +45,11 @@
      titlePanel("New American Pathways Housing Scout"), br(), h2("Selection Criteria"),
      sidebarLayout(
        sidebarPanel(width = 3, position = "left",
-                    checkboxInput(inputId='dekalb', label=h3('Dekalb'), value = TRUE, width = NULL),
-                    checkboxInput(inputId='fulton', label=h3('Fulton'), value = TRUE, width = NULL),
-                    checkboxInput(inputId='transit_stops', label='Public Transit', value = TRUE, width = NULL),
-                    checkboxInput(inputId='schools', label='Schools', value = TRUE, width = NULL)
+                    checkboxInput(inputId='dekalb', label='Dekalb', value = TRUE, width = '400px'),
+                    checkboxInput(inputId='fulton', label='Fulton', value = TRUE, width = '400px'),
+                    checkboxInput(inputId='transit_stops', label='Public Transit', value = TRUE, width = '400px'),
+                    checkboxInput(inputId='schools', label='Schools', value = TRUE, width = '400px'),
+                    checkboxInput(inputId='supermarkets', label='Supermarkets', value = TRUE, width = '400px')
        ),
                    mainPanel(
                      leafletOutput("main_map", height = "500", width = "800")
