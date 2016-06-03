@@ -31,6 +31,11 @@
    dekalb_supermarkets <- read.csv(path_to_dekalb_supermarkets)
    fulton_supermarkets <- read.csv(path_to_fulton_supermarkets)
    
+   ###-----------------------------------transit-stops---------------------------------------###
+   path_to_transit_stops <- paste(data_folder, 'transit_stops.csv', sep='/')
+   
+   transit_stops <- read.csv(path_to_transit_stops)
+   
    ###########################################################################################
    ###-------------------------------------------UI----------------------------------------###
    ###########################################################################################
