@@ -45,11 +45,9 @@
      titlePanel("New American Pathways Housing Scout"), br(), h2("Selection Criteria"),
      sidebarLayout(
        sidebarPanel(width = 3, position = "left",
-                    checkboxGroupInput(inputId='counties', label=h3('Counties'), 
-                                       choices=list("Dekalb" = 1, "Fulton" = 2), 
-                                       selected = list(1,2), inline = FALSE, width = NULL),
-                    
-                    checkboxInput(inputId='public_transit', label='Public Transit', value = TRUE, width = NULL),
+                    checkboxInput(inputId='dekalb', label=h3('Dekalb'), value = TRUE, width = NULL),
+                    checkboxInput(inputId='fulton', label=h3('Fulton'), value = TRUE, width = NULL),
+                    checkboxInput(inputId='transit_stops', label='Public Transit', value = TRUE, width = NULL),
                     checkboxInput(inputId='schools', label='Schools', value = TRUE, width = NULL)
        ),
                    mainPanel(
@@ -68,19 +66,68 @@
      output$main_map <- renderLeaflet({
        leaflet() %>%
          addTiles(urlTemplate = "http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png") %>%
-         setView(-84.3959808,33.7769859, zoom = 10) #%>%
-#          addCircles(data=dekalb_schools, lat = ~latitude, lng = ~longitude, 
-#                    weight = 5, radius = 80, fillOpacity = .05, popup = dekalb_schools$school_name, group='Schools'),
-#          addCircles(data=dekalb_schools, lat = ~latitude, lng = ~longitude, 
-#                   weight = 5, radius = 80, fillOpacity = .05, popup = dekalb_schools$school_name, group='Schools'),
+         setView(-84.3959808,33.7769859, zoom = 10) 
      })#output$main_map
- 
      
+     ###--------------------------Dekalb and Fulton Counties-------------------------------###
+     observe({
+       proxy <- leafletProxy("main_map", data = transit_stops)
+       
+       # clear all shapes if none of the counties selected
+       if (!(input$dekalb & input$fulton))
+       {
+         proxy %>% 
+           clearShapes() 
+       }
+     })#Dekalb and Fulton Counties
+ 
+     ###--------------------------Public Transit--------------------------------------------###
+     observe({
+       proxy <- leafletProxy("main_map", data = transit_stops)
+       
+       if (input$transit_stops) {
+         proxy %>% 
+           addCircles(data=transit_stops, lat = ~Lat, lng = ~Lon, 
+                    weight = 5, radius = 80, fillOpacity = .05, popup = transit_stops$name, group='group_transit_stops')
+       }
+ 
+     })#Public transit
+     
+     ###--------------------------Schools Dekalb and Fulton----------------------------------###
+     observe({
+       proxy <- leafletProxy("main_map")
+       
+       if (input$dekalb & input$schools) 
+       {
+         proxy %>% 
+           addCircles(data=dekalb_schools, lat = ~latitude, lng = ~longitude, 
+                      weight = 3, radius = 40, fillOpacity = .02, popup = dekalb_schools$school_name, group='group_dekalb_schools')
+       }
+       else
+       {
+
+       }
+       
+       if (input$fulton & input$schools)
+       {
+         proxy %>% 
+         addCircles(data=fulton_schools, lat = ~latitude, lng = ~longitude, 
+                    weight = 3, radius = 40, fillOpacity = .01, popup = fulton_schools$school_name, group='group_fulton_schools')
+       }
+       else
+       {
+    
+       }
+
+     })#Schools
+
+#      proxy <- leafletProxy("main_map")
+#      proxy %>% 
 #      addLayersControl(
-#        overlayGroups = c('Schools'),
+#        overlayGroups = c("Public Transit", "Schools"),
 #        options = layersControlOptions(collapsed = FALSE)
 #      )
-
+     
    }#server
    
    shinyApp(ui = ui, server = server)
